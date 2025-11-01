@@ -1,0 +1,9 @@
+# File rahasia Streamlit (SANGAT PENTING)
+# Ini mencegah file API key lokal Anda terunggah ke GitHub
+.streamlit/secrets.toml
+
+# File-file cache dan environment Python
+*.pyc
+__pycache__/
+.venv/
+venv/
