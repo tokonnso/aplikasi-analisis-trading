@@ -14,17 +14,22 @@ st.set_page_config(
 st.title("Analisis Indikator Trading AI 📈🔍")
 st.markdown("Unggah screenshot chart Anda, dan AI (Gemini) akan menganalisisnya.")
 
-# --- Penanganan API Key ---
-try:
-    api_key = st.secrets["GOOGLE_API_KEY"]
-    genai.configure(api_key=api_key)
-except (KeyError, FileNotFoundError):
-    st.error("File `.streamlit/secrets.toml` tidak ditemukan atau tidak berisi `GOOGLE_API_KEY`.")
-    st.info("Harap buat file `.streamlit/secrets.toml` di folder proyek Anda dan tambahkan `GOOGLE_API_KEY = \"API_KEY_ANDA\"`.")
+# --- Penanganan API Key (Hardcoded) ---
+# PERINGATAN: Menempelkan API key langsung di kode seperti ini SANGAT BERISIKO
+# jika kode ini dibagikan atau diunggah ke GitHub.
+# Siapapun dapat melihat dan menggunakan API Key Anda.
+api_key = "AIzaSyBko8lA5slVT46Zr0VJxTN5Dn02IGmGhEA"
+
+if not api_key:
+    st.error("API Key tidak ditemukan dalam kode.")
     st.stop()
+
+try:
+    genai.configure(api_key=api_key)
 except Exception as e:
     st.error(f"Gagal mengkonfigurasi Google AI. Pastikan API Key Anda valid. Error: {e}")
     st.stop()
+
 
 # --- Konfigurasi Model AI ---
 try:
@@ -65,14 +70,10 @@ st.markdown("""
         background-color: #f0f2f6;
     }
     
-    /* Styling untuk bagian header/top bar (jika ada) */
-    .css-1d391kg, .css-1dp5vir { /* Elemen yang mungkin memegang top bar atau header */
+    /* Styling untuk bagian header/top bar (jika ada) - Menggunakan selektor yang lebih aman */
+    header { 
         background-color: #ffffff; /* Putih untuk top bar */
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        padding: 10px 20px;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
     }
 
     /* Styling untuk title dan markdown */
@@ -150,7 +151,8 @@ st.markdown("""
         margin-top: 1.5em;
         margin-bottom: 0.8em;
     }
-    .stMarkdown p {
+    /* Menargetkan blok markdown yang berisi hasil */
+    .stMarkdown [data-testid="stMarkdownContainer"] p {
         background-color: #f8f9fa; /* Latar belakang abu-abu sangat terang */
         border-left: 5px solid #007bff;
         padding: 15px;
@@ -158,9 +160,9 @@ st.markdown("""
         margin-bottom: 15px;
         line-height: 1.7;
     }
-
-    /* Styling untuk peringatan penting */
-    .st-emotion-cache-1fixmsd { /* Class untuk st.warning */
+    
+    /* Styling untuk peringatan penting (st.warning) */
+    [data-testid="stNotificationContentWarning"] {
         background-color: #fff3cd; /* Kuning muda */
         border-left: 5px solid #ffc107; /* Kuning */
         color: #664d03;
@@ -168,12 +170,12 @@ st.markdown("""
         border-radius: 5px;
         margin-top: 20px;
     }
-    .st-emotion-cache-1fixmsd strong {
+    [data-testid="stNotificationContentWarning"] strong {
         color: #664d03;
     }
 
-    /* Styling untuk info pesan awal */
-    .st-emotion-cache-1g8o837 { /* Class untuk st.info */
+    /* Styling untuk info pesan awal (st.info) */
+    [data-testid="stNotificationContentInfo"] {
         background-color: #d1ecf1; /* Biru muda */
         border-left: 5px solid #17a2b8; /* Biru terang */
         color: #0c5460;
